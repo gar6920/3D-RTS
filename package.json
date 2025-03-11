@@ -1,0 +1,19 @@
+{
+  "name": "conquerors-quest",
+  "version": "0.1.0",
+  "description": "A cooperative 3D RTS game using Three.js and Colyseus",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "colyseus": "^0.14.23",
+    "express": "^4.17.3",
+    "three": "^0.139.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+} 

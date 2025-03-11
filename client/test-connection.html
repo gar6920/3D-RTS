@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colyseus Connection Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    #connection-status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .connected {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .disconnected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #logs {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Colyseus Connection Test</h1>
+  
+  <div id="connection-status" class="disconnected">Not Connected</div>
+  
+  <button id="connect-btn">Connect to Server</button>
+  <button id="disconnect-btn" disabled>Disconnect</button>
+  
+  <div id="logs"></div>
+  
+  <script src="https://unpkg.com/colyseus.js@^0.14.0/dist/colyseus.js"></script>
+  <script>
+    const connectBtn = document.getElementById('connect-btn');
+    const disconnectBtn = document.getElementById('disconnect-btn');
+    const statusEl = document.getElementById('connection-status');
+    const logsEl = document.getElementById('logs');
+    
+    let client = null;
+    let room = null;
+    
+    function log(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      logsEl.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+      logsEl.scrollTop = logsEl.scrollHeight;
+      console.log(`[${timestamp}] ${message}`);
+    }
+    
+    connectBtn.addEventListener('click', async () => {
+      log('Attempting to connect to Colyseus server...');
+      
+      try {
+        // Create Colyseus client
+        client = new Colyseus.Client('ws://localhost:3000');
+        
+        // Join or create room
+        room = await client.joinOrCreate('game_room');
+        
+        // Successfully connected
+        statusEl.textContent = 'Connected to Colyseus server!';
+        statusEl.className = 'connected';
+        connectBtn.disabled = true;
+        disconnectBtn.disabled = false;
+        
+        log(`Successfully connected! Session ID: ${room.sessionId}`);
+        
+        // Listen for state changes
+        room.onStateChange((state) => {
+          log(`State updated: ${JSON.stringify(state)}`);
+        });
+        
+        // Listen for errors
+        room.onError((code, message) => {
+          log(`Error: ${message} (code: ${code})`);
+        });
+        
+        // Listen for room leave
+        room.onLeave((code) => {
+          log(`Left room with code: ${code}`);
+          statusEl.textContent = 'Disconnected from server';
+          statusEl.className = 'disconnected';
+          connectBtn.disabled = false;
+          disconnectBtn.disabled = true;
+          room = null;
+        });
+        
+      } catch (error) {
+        log(`Connection error: ${error.message}`);
+        statusEl.textContent = 'Connection failed!';
+      }
+    });
+    
+    disconnectBtn.addEventListener('click', () => {
+      if (room) {
+        log('Disconnecting from server...');
+        room.leave();
+      }
+    });
+    
+    // Initial log
+    log('Page loaded. Click "Connect to Server" to begin.');
+  </script>
+</body>
+</html> 

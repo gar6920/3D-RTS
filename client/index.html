@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conqueror's Quest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <h1>Conqueror's Quest</h1>
+    <div id="connection-status">Not connected</div>
+    <button id="connect-button">Connect to Server</button>
+    <div id="log-container">
+      <h2>Connection Logs</h2>
+      <div id="logs"></div>
+    </div>
+  </div>
+
+  <!-- Load Colyseus client library -->
+  <script src="https://unpkg.com/colyseus.js@^0.14.0/dist/colyseus.js"></script>
+  
+  <!-- Load Three.js (we'll use it later) -->
+  <script src="https://unpkg.com/three@0.139.2/build/three.min.js"></script>
+  
+  <!-- Load our main client script -->
+  <script src="main.js"></script>
+</body>
+</html> 
