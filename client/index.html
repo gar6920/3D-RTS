@@ -3,115 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conqueror's Quest - Multiplayer Test</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        #game-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        #status {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 4px;
-            background-color: #eee;
-        }
-        #controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 8px 16px;
-            background-color: #4a7eb9;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #3b6798;
-        }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        #position-input {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-        #position-input input {
-            padding: 5px;
-        }
-        #logs {
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 14px;
-            background-color: #f9f9f9;
-        }
-        .log-entry {
-            margin-bottom: 5px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 3px;
-        }
-        .player-info {
-            margin-top: 20px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-        }
-    </style>
+    <title>Conqueror's Quest - 3D Multiplayer RTS</title>
+    
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/three@0.137.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.137.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/colyseus.js@0.14.13/dist/colyseus.js"></script>
+    
+    <!-- Game Scripts -->
+    <script src="js/three/scene.js"></script>
+    <script src="js/three/entities.js"></script>
+    <script src="js/three/minimap.js"></script>
+    <script src="js/network.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
 </head>
 <body>
-    <div id="game-container">
-        <h1>Conqueror's Quest</h1>
-        <p>Multiplayer Testing Interface</p>
-        
-        <div id="status">Not connected</div>
-        
-        <div id="controls">
-            <button id="connect-btn">Connect</button>
-            <button id="disconnect-btn" disabled>Disconnect</button>
-        </div>
-        
-        <div id="game-controls" style="display: none;">
-            <h3>Hero Movement</h3>
-            <div id="position-input">
-                <input type="number" id="x-pos" placeholder="X Position" value="10">
-                <input type="number" id="y-pos" placeholder="Y Position" value="0">
-                <input type="number" id="z-pos" placeholder="Z Position" value="10">
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="overlay">
+        <div class="login-container">
+            <div class="game-logo">
+                <h1>Conqueror's Quest</h1>
+                <p>3D Multiplayer RTS Game</p>
             </div>
-            <button id="move-hero-btn">Move Hero</button>
-        </div>
-        
-        <h3>Logs</h3>
-        <div id="logs"></div>
-        
-        <div class="player-info" id="player-info">
-            <h3>Player Info</h3>
-            <div>Not connected yet</div>
+            
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="player-name">Enter Your Name:</label>
+                    <input type="text" id="player-name" placeholder="Commander..." required>
+                </div>
+                <button type="submit" class="primary-button">Join Game</button>
+            </form>
+            
+            <p class="connection-status"></p>
         </div>
     </div>
-
-    <script src="https://unpkg.com/colyseus.js@0.14.13/dist/colyseus.js"></script>
-    <script src="main.js"></script>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="overlay" style="display: none;">
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <p class="loading-message">Loading...</p>
+        </div>
+    </div>
+    
+    <!-- Game UI -->
+    <div id="game-ui" class="game-ui">
+        <!-- Resources Panel -->
+        <div id="resources-panel" class="resources-panel">
+            <div class="resource">
+                <span class="resource-icon materials-icon">M</span>
+                <span id="materials-value" class="resource-value">0</span>
+            </div>
+            <div class="resource">
+                <span class="resource-icon energy-icon">E</span>
+                <span id="energy-value" class="resource-value">0</span>
+            </div>
+            <button id="disconnect-btn" class="disconnect-button">Disconnect</button>
+        </div>
+        
+        <!-- Minimap -->
+        <div id="minimap-container" class="minimap-container">
+            <canvas id="minimap-canvas" class="minimap-canvas"></canvas>
+        </div>
+        
+        <!-- Selection Panel -->
+        <div id="selection-panel" class="selection-panel">
+            <div class="no-selection">No selection</div>
+        </div>
+        
+        <!-- Command Panel -->
+        <div id="command-panel" class="command-panel"></div>
+        
+        <!-- Chat Panel -->
+        <div id="chat-panel" class="chat-panel">
+            <div id="chat-messages" class="chat-messages"></div>
+            <form id="chat-form" class="chat-form">
+                <input type="text" id="chat-input" placeholder="Type a message...">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        
+        <!-- Notification Area -->
+        <div id="notification-area" class="notification-area"></div>
+    </div>
+    
+    <!-- Game Canvas Container - main 3D view -->
+    <div id="game-canvas-container" class="game-canvas-container"></div>
 </body>
 </html> 

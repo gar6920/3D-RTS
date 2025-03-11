@@ -1,0 +1,566 @@
+/* 
+ * Conqueror's Quest - Main CSS
+ * CSS styles for the 3D RTS game user interface
+ */
+
+/* ---------- Global Styles ---------- */
+:root {
+    /* Color Variables */
+    --primary-color: #2a6cad;
+    --primary-hover: #3680c8;
+    --secondary-color: #5e9e2e;
+    --secondary-hover: #6db435;
+    --background-color: #1a1a1a;
+    --surface-color: #2b2b2b;
+    --surface-light: #3c3c3c;
+    --text-color: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: #444444;
+    --success-color: #4CAF50;
+    --warning-color: #FFC107;
+    --error-color: #F44336;
+    --info-color: #2196F3;
+    
+    /* Sizes */
+    --header-height: 50px;
+    --minimap-size: 200px;
+    --selection-panel-width: 300px;
+    --command-panel-height: 150px;
+    --chat-panel-width: 300px;
+    --chat-panel-height: 250px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
+button:disabled {
+    background-color: var(--surface-light);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+input[type="text"] {
+    background-color: var(--surface-light);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 100%;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+h1, h2, h3, h4 {
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+/* ---------- Game Canvas Container ---------- */
+.game-canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* ---------- Game UI ---------- */
+.game-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.game-ui > * {
+    pointer-events: auto;
+}
+
+/* ---------- Resources Panel ---------- */
+.resources-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 100;
+}
+
+.resource {
+    display: flex;
+    align-items: center;
+    margin-right: 24px;
+}
+
+.resource-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.materials-icon {
+    background-color: #d2b48c;
+    color: #000;
+}
+
+.energy-icon {
+    background-color: #4fc3f7;
+    color: #000;
+}
+
+.resource-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.disconnect-button {
+    margin-left: auto;
+    background-color: var(--error-color);
+}
+
+.disconnect-button:hover {
+    background-color: #d32f2f;
+}
+
+/* ---------- Minimap ---------- */
+.minimap-container {
+    position: absolute;
+    top: 60px;
+    left: 10px;
+    width: var(--minimap-size);
+    height: var(--minimap-size);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 90;
+}
+
+.minimap-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ---------- Selection Panel ---------- */
+.selection-panel {
+    position: absolute;
+    bottom: calc(var(--command-panel-height) + 10px);
+    right: 10px;
+    width: var(--selection-panel-width);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 80;
+}
+
+.selection-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.hero-header h3 {
+    color: #4fc3f7;
+}
+
+.building-header h3 {
+    color: #aed581;
+}
+
+.soldier-header h3 {
+    color: #ff8a65;
+}
+
+.selection-properties {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.property {
+    display: flex;
+    align-items: center;
+}
+
+.property label {
+    width: 80px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.progress-bar {
+    flex: 1;
+    height: 16px;
+    background-color: var(--surface-light);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress {
+    height: 100%;
+    background-color: var(--success-color);
+}
+
+.progress-bar span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+}
+
+.no-selection {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* ---------- Command Panel ---------- */
+.command-panel {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: var(--selection-panel-width);
+    height: var(--command-panel-height);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    overflow-y: auto;
+    z-index: 70;
+}
+
+.command-section {
+    margin-bottom: 16px;
+}
+
+.command-section h4 {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.command-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.build-button, .recruit-button {
+    background-color: var(--secondary-color);
+    font-size: 13px;
+}
+
+.build-button:hover, .recruit-button:hover {
+    background-color: var(--secondary-hover);
+}
+
+.info-text {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* ---------- Chat Panel ---------- */
+.chat-panel {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: var(--chat-panel-width);
+    height: var(--chat-panel-height);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    z-index: 60;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.chat-message {
+    margin-bottom: 8px;
+    word-break: break-word;
+}
+
+.chat-message .sender {
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+.chat-message.system .sender {
+    color: var(--info-color);
+}
+
+.chat-form {
+    display: flex;
+    padding: 8px;
+    border-top: 1px solid var(--border-color);
+}
+
+.chat-form input {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.chat-form button {
+    width: 60px;
+}
+
+/* ---------- Notification Area ---------- */
+.notification-area {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    z-index: 110;
+}
+
+.notification {
+    padding: 10px 16px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.8);
+    max-width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out;
+    transition: opacity 0.3s;
+}
+
+.notification.info {
+    border-left: 4px solid var(--info-color);
+}
+
+.notification.success {
+    border-left: 4px solid var(--success-color);
+}
+
+.notification.warning {
+    border-left: 4px solid var(--warning-color);
+}
+
+.notification.error {
+    border-left: 4px solid var(--error-color);
+}
+
+.notification.fade-out {
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Overlays ---------- */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Login Overlay */
+.login-container {
+    background-color: var(--surface-color);
+    border-radius: 8px;
+    width: 400px;
+    padding: 32px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.game-logo {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.game-logo h1 {
+    font-size: 32px;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.game-logo p {
+    color: var(--text-muted);
+}
+
+.login-form {
+    margin-bottom: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.primary-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.connection-status {
+    text-align: center;
+    color: var(--text-muted);
+    min-height: 20px;
+}
+
+.overlay.connecting .primary-button {
+    display: none;
+}
+
+/* Loading Screen */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-message {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* ---------- Debug Console ---------- */
+.debug-console {
+    position: absolute;
+    bottom: 10px;
+    right: calc(var(--selection-panel-width) + 20px);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 8px;
+    z-index: 120;
+}
+
+.debug-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.debug-item {
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.debug-item.connected {
+    color: var(--success-color);
+}
+
+.debug-item.disconnected {
+    color: var(--error-color);
+}
+
+/* ---------- Media Queries ---------- */
+@media (max-width: 1024px) {
+    :root {
+        --minimap-size: 150px;
+        --selection-panel-width: 250px;
+        --chat-panel-width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --minimap-size: 120px;
+        --selection-panel-width: 200px;
+        --command-panel-height: 120px;
+        --chat-panel-width: 200px;
+        --chat-panel-height: 200px;
+    }
+    
+    .login-container {
+        width: 90%;
+        max-width: 400px;
+        padding: 20px;
+    }
+} 
